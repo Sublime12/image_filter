@@ -2,7 +2,9 @@
 mod conv;
 
 
-use image::{ImageBuffer, ImageReader};
+use image::{DynamicImage, ImageBuffer, ImageReader};
+
+use crate::conv::correlate;
 
 fn main() {
     //generate_gradient_image();
@@ -11,16 +13,26 @@ fn main() {
 
 fn load_images() {
     let img = ImageReader::open("zebra.jpg").unwrap().decode().unwrap();
-    let mut img = img.to_rgb8();
+    let mut img = img.to_rgb32f();
 
     for (_, _, pixel) in img.enumerate_pixels_mut() {
-        let r = pixel[0].saturating_sub(50);
-        let g = pixel[1].saturating_sub(50);
-        let b = pixel[2].saturating_sub(50);
+        let r = (pixel[0] - 0.2).clamp(0., 1.);
+        let g = (pixel[1] - 0.2).clamp(0., 1.);
+        let b = (pixel[2] - 0.2).clamp(0., 1.);
         *pixel = image::Rgb([r, g, b]);
     }
 
-    img.save("zebra_darker.jpg").unwrap();
+    let kernel: Vec<Vec<f32>> = [
+        [-1., 0. , 1.].to_vec(),
+        [-2., 0. , 2.].to_vec(),
+        [-1., 0. , 1.].to_vec(),
+    ].to_vec();
+
+    let mut output_img = ImageBuffer::new(img.width(), img.height());
+    correlate(&img, &kernel, &mut output_img);
+
+    let output_img = DynamicImage::ImageRgb32F(output_img).to_rgb8();
+    output_img.save("zebra_sobel.jpg").unwrap();
 }
 
 fn generate_gradient_image() {
