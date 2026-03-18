@@ -3,7 +3,7 @@
 use image::Rgb32FImage;
 
 pub fn correlate(img: &Rgb32FImage, kernel: &[Vec<f32>], out_img: &mut Rgb32FImage) {
-    for (x, y,  pixel) in out_img.enumerate_pixels_mut() {
+    for (x, y, pixel) in out_img.enumerate_pixels_mut() {
         let mut r = 0f32;
         let mut g = 0f32;
         let mut b = 0f32;
@@ -16,7 +16,10 @@ pub fn correlate(img: &Rgb32FImage, kernel: &[Vec<f32>], out_img: &mut Rgb32FIma
                 let offset_i = i as i32 - kernel_center_x as i32;
                 let offset_j = j as i32 - kernel_center_y as i32;
 
-                let pixel = img.get_pixel_checked((x as i32 + offset_i) as u32, ((y as i32) + offset_j)as u32);
+                let pixel = img.get_pixel_checked(
+                    (x as i32 + offset_i) as u32,
+                    ((y as i32) + offset_j) as u32,
+                );
                 if let Some(pixel) = pixel {
                     r += pixel[0] * kernel_pixel;
                     g += pixel[1] * kernel_pixel;

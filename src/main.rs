@@ -1,7 +1,6 @@
 #![allow(dead_code)]
 mod conv;
 
-
 use image::{DynamicImage, ImageBuffer, ImageReader};
 
 use crate::conv::correlate;
@@ -23,10 +22,11 @@ fn load_images() {
     }
 
     let kernel: Vec<Vec<f32>> = [
-        [-1., 0. , 1.].to_vec(),
-        [-2., 0. , 2.].to_vec(),
-        [-1., 0. , 1.].to_vec(),
-    ].to_vec();
+        [-1., 0., 1.].to_vec(),
+        [-2., 0., 2.].to_vec(),
+        [-1., 0., 1.].to_vec(),
+    ]
+    .to_vec();
 
     let mut output_img = ImageBuffer::new(img.width(), img.height());
     correlate(&img, &kernel, &mut output_img);
