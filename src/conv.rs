@@ -3,7 +3,10 @@
 use image::Rgb32FImage;
 
 pub fn correlate(img: &Rgb32FImage, kernel: &[Vec<f32>], out_img: &mut Rgb32FImage) {
-    assert!(!kernel.is_empty());
+    assert!(!kernel.is_empty() && !kernel[0].is_empty());
+    assert!(!img.is_empty() && img.len() == out_img.len());
+    assert!(img.width() == out_img.width() && img.height() == out_img.height());
+
     let center_x = kernel.len() / 2;
     let center_y = kernel[0].len() / 2;
     for (x, y, pixel) in out_img.enumerate_pixels_mut() {
