@@ -8,13 +8,13 @@ pub fn correlate(img: &Rgb32FImage, kernel: &[Vec<f32>], out_img: &mut Rgb32FIma
         let mut g = 0f32;
         let mut b = 0f32;
 
-        let kernel_center_x = kernel.len() / 2;
-        let kernel_center_y = kernel[0].len() / 2;
+        let center_x = kernel.len() / 2;
+        let center_y = kernel[0].len() / 2;
 
         for (i, k_row) in kernel.iter().enumerate() {
             for (j, kernel_pixel) in k_row.iter().enumerate() {
-                let offset_i = i as i32 - kernel_center_x as i32;
-                let offset_j = j as i32 - kernel_center_y as i32;
+                let offset_i = i as i32 - center_x as i32;
+                let offset_j = j as i32 - center_y as i32;
 
                 let pixel = img.get_pixel_checked(
                     (x as i32 + offset_i) as u32,
